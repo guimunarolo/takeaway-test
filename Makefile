@@ -29,3 +29,6 @@ clean:
 	@rm -rf build
 	@rm -rf htmlcov
 	@rm -rf dist
+
+ipython:
+	docker-compose run --rm users_api bash -c "pip install ipython && ipython"
