@@ -19,7 +19,8 @@ class TestGitHubClient:
             mock_response.get(
                 f"{self.base_uri}/users/test", payload=github_user_data
             )
-            result = await self.gh_client.get_user_details("test")
+            async with self.gh_client as client_session:
+                result = await client_session.get_user_details("test")
 
         assert result == github_user_data
 
@@ -30,7 +31,8 @@ class TestGitHubClient:
             mock_response.get(url, status=error_status)
 
             with pytest.raises(GitHubRequestError) as error:
-                await self.gh_client.get_user_details("test")
+                async with self.gh_client as client_session:
+                    await client_session.get_user_details("test")
 
             expected_error = (
                 f"GitHub request Error. Status: {error_status} - URL: {url}"
@@ -45,7 +47,8 @@ class TestGitHubClient:
                 f"{self.base_uri}/users/test/repos?direction=desc&sort=updated",
                 payload=github_user_repositories_data,
             )
-            result = await self.gh_client.get_user_repositories("test")
+            async with self.gh_client as client_session:
+                result = await client_session.get_user_repositories("test")
 
         assert result == github_user_repositories_data
 
@@ -58,7 +61,8 @@ class TestGitHubClient:
             )
 
             with pytest.raises(GitHubRequestError) as error:
-                await self.gh_client.get_user_repositories("test")
+                async with self.gh_client as client_session:
+                    await client_session.get_user_repositories("test")
 
             expected_error = (
                 f"GitHub request Error. Status: {error_status} - URL: {url}"
@@ -73,7 +77,10 @@ class TestGitHubClient:
                 f"{self.base_uri}/repos/testing/test/commits?per_page=5&page=1",
                 payload=github_user_repository_commits_data,
             )
-            result = await self.gh_client.get_repository_commits("testing/test")
+            async with self.gh_client as client_session:
+                result = await client_session.get_repository_commits(
+                    "testing/test"
+                )
 
         assert result == github_user_repository_commits_data
 
@@ -86,7 +93,8 @@ class TestGitHubClient:
             mock_response.get(f"{url}?per_page=5&page=1", status=error_status)
 
             with pytest.raises(GitHubRequestError) as error:
-                await self.gh_client.get_repository_commits("testing/test")
+                async with self.gh_client as client_session:
+                    await client_session.get_repository_commits("testing/test")
 
             expected_error = (
                 f"GitHub request Error. Status: {error_status} - URL: {url}"

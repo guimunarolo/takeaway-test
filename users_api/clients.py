@@ -11,6 +11,14 @@ class GitHubClient:
     _access_token = None
     _base_uri = "https://api.github.com"
 
+    async def __aenter__(self):
+        self._session = ClientSession(headers=self._get_headers())
+        return self
+
+    async def __aexit__(self, *err):
+        await self._session.close()
+        self._session = None
+
     def __init__(self, access_token: str):
         self._access_token = access_token
 
@@ -21,26 +29,22 @@ class GitHubClient:
         }
 
     async def _make_request(self, method, path, data={}, params={}):
-        async with ClientSession(headers=self._get_headers()) as session:
-            session_method = getattr(session, method)
-            url = f"{self._base_uri}{path}"
-            response = await session_method(url, json=data, params=params)
-            if not response.ok:
-                raise GitHubRequestError(
-                    f"GitHub request Error. Status: {response.status} - URL: {url}"
-                )
+        url = f"{self._base_uri}{path}"
+        session_method = getattr(self._session, method)
+        response = await session_method(url, json=data, params=params)
+        if not response.ok:
+            raise GitHubRequestError(
+                f"GitHub request Error. Status: {response.status} - URL: {url}"
+            )
 
-            return await response.json()
+        return await response.json()
 
     async def get_user_details(self, username: str) -> Dict:
-        url = f"/users/{username}"
-
-        return await self._make_request("get", url)
+        return await self._make_request("get", f"/users/{username}")
 
     async def get_user_repositories(self, username: str) -> Dict:
         params = {"sort": "updated", "direction": "desc"}
         url = f"/users/{username}/repos"
-
         return await self._make_request("get", url, params=params)
 
     async def get_repository_commits(
@@ -48,5 +52,4 @@ class GitHubClient:
     ) -> Dict:
         params = {"per_page": per_page, "page": page}
         url = f"/repos/{repo_fullname}/commits"
-
         return await self._make_request("get", url, params=params)
