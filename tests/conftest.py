@@ -41,7 +41,7 @@ def github_user_data():
 
 @pytest.fixture
 def github_user_repositories_data():
-    [
+    return [
         {
             "id": 1296269,
             "node_id": "MDEwOlJlcG9zaXRvcnkxMjk2MjY5",

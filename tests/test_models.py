@@ -12,10 +12,20 @@ class TestCommit:
         assert commit.sha == commit_data["sha"]
         assert commit.author_email == commit_data["author_email"]
         assert commit.committer_email == commit_data["committer_email"]
-        assert commit.created_at.isoformat() == isoformat(
-            commit_data["created_at"]
-        )
+        assert commit.created_at == isoformat(commit_data["created_at"])
         assert commit.url == commit_data["url"]
+
+    def test_from_api_data_parsing(self, github_user_repository_commits_data):
+        data = github_user_repository_commits_data[0]
+        commit = Commit.from_api_data(data)
+
+        assert commit.sha == data["sha"]
+        assert commit.author_email == data["commit"]["author"]["email"]
+        assert commit.committer_email == data["commit"]["committer"]["email"]
+        assert commit.created_at == isoformat(
+            data["commit"]["committer"]["date"]
+        )
+        assert commit.url == data["url"]
 
 
 class TestRepository:
@@ -25,12 +35,8 @@ class TestRepository:
         assert repo.name == repository_data["name"]
         assert repo.id == repository_data["id"]
         assert repo.full_name == repository_data["full_name"]
-        assert repo.created_at.isoformat() == isoformat(
-            repository_data["created_at"]
-        )
-        assert repo.updated_at.isoformat() == isoformat(
-            repository_data["updated_at"]
-        )
+        assert repo.created_at == isoformat(repository_data["created_at"])
+        assert repo.updated_at == isoformat(repository_data["updated_at"])
         assert repo.url == repository_data["url"]
         assert repo.last_commit == {}
 
@@ -39,6 +45,17 @@ class TestRepository:
         repo = Repository(**repository_data)
 
         assert isinstance(repo.last_commit, Commit) is True
+
+    def test_from_api_data_parsing(self, github_user_repositories_data):
+        data = github_user_repositories_data[0]
+        repo = Repository.from_api_data(data)
+
+        assert repo.name == data["name"]
+        assert repo.id == data["id"]
+        assert repo.full_name == data["full_name"]
+        assert repo.created_at == isoformat(data["created_at"])
+        assert repo.updated_at == isoformat(data["updated_at"])
+        assert repo.url == data["url"]
 
 
 class TestUser:
@@ -55,3 +72,10 @@ class TestUser:
         user = User(**user_data)
 
         assert isinstance(user.public_repositories[0], Repository) is True
+
+    def test_from_api_data_parsing(self, github_user_data):
+        user = User.from_api_data(github_user_data)
+
+        assert user.login == github_user_data["login"]
+        assert user.id == github_user_data["id"]
+        assert user.url == github_user_data["url"]
