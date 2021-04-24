@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+  users_api:
+    build: .
+    command: gunicorn users_api.main:init_app -b :8080 --worker-class aiohttp.GunicornWebWorker --reload --access-logfile -
+    ports:
+      - 8080:8080
+    volumes:
+      - ./:/app

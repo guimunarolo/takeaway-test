@@ -1,0 +1,2 @@
+[run]
+omit = users_api/main.py, users_api/configs.py, */__init__.py
