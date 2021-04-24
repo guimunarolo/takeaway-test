@@ -351,6 +351,7 @@ def repository_data():
     return {
         "name": "test",
         "id": 1,
+        "full_name": "guimunarolo/test",
         "created_at": "2008-04-24T10:33:35Z",
         "updated_at": "2008-04-24T10:33:35Z",
         "url": "https://api.github.com/repos/guimunarolo/test",

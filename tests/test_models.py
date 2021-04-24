@@ -24,6 +24,7 @@ class TestRepository:
 
         assert repo.name == repository_data["name"]
         assert repo.id == repository_data["id"]
+        assert repo.full_name == repository_data["full_name"]
         assert repo.created_at.isoformat() == isoformat(
             repository_data["created_at"]
         )

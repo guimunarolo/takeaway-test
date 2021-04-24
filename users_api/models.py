@@ -15,6 +15,7 @@ class Commit(BaseModel):
 class Repository(BaseModel):
     name: str
     id: int
+    full_name: str
     created_at: datetime
     updated_at: datetime
     url: str
