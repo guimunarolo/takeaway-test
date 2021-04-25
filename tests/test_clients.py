@@ -1,7 +1,8 @@
 import pytest
 from aioresponses import aioresponses
 
-from users_api.clients import GitHubClient, GitHubRequestError
+from users_api.clients import GitHubClient
+from users_api.exceptions import GitHubRequestError
 
 pytestmark = pytest.mark.asyncio
 

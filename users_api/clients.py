@@ -2,9 +2,7 @@ from typing import Dict
 
 from aiohttp import ClientSession
 
-
-class GitHubRequestError(Exception):
-    pass
+from .exceptions import GitHubRequestError
 
 
 class GitHubClient:
