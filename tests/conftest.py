@@ -1,5 +1,7 @@
 import pytest
 
+from users_api.models import Commit, Repository, User
+
 
 @pytest.fixture
 def github_user_data():
@@ -365,3 +367,18 @@ def user_data():
         "id": 1,
         "url": "https://api.github.com/users/guimunarolo",
     }
+
+
+@pytest.fixture
+def user(github_user_data):
+    return User.from_api_data(github_user_data)
+
+
+@pytest.fixture
+def repository(github_user_repositories_data):
+    return Repository.from_api_data(github_user_repositories_data[0])
+
+
+@pytest.fixture
+def commit(github_user_repository_commits_data):
+    return Commit.from_api_data(github_user_repository_commits_data[0])
