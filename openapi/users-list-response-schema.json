@@ -1,0 +1,120 @@
+{
+  "title":"User",
+  "type":"object",
+  "properties":{
+    "login":{
+      "title":"Login",
+      "type":"string"
+    },
+    "id":{
+      "title":"Id",
+      "type":"integer"
+    },
+    "url":{
+      "title":"Url",
+      "type":"string"
+    },
+    "public_repositories":{
+      "title":"Public Repositories",
+      "default":[
+
+      ],
+      "type":"array",
+      "items":{
+        "$ref":"#/definitions/Repository"
+      }
+    }
+  },
+  "required":[
+    "login",
+    "id",
+    "url"
+  ],
+  "definitions":{
+    "Commit":{
+      "title":"Commit",
+      "type":"object",
+      "properties":{
+        "sha":{
+          "title":"Sha",
+          "type":"string"
+        },
+        "author_email":{
+          "title":"Author Email",
+          "type":"string"
+        },
+        "committer_email":{
+          "title":"Committer Email",
+          "type":"string"
+        },
+        "created_at":{
+          "title":"Created At",
+          "type":"string",
+          "format":"date-time"
+        },
+        "url":{
+          "title":"Url",
+          "type":"string"
+        }
+      },
+      "required":[
+        "sha",
+        "author_email",
+        "committer_email",
+        "created_at",
+        "url"
+      ]
+    },
+    "Repository":{
+      "title":"Repository",
+      "type":"object",
+      "properties":{
+        "name":{
+          "title":"Name",
+          "type":"string"
+        },
+        "id":{
+          "title":"Id",
+          "type":"integer"
+        },
+        "full_name":{
+          "title":"Full Name",
+          "type":"string"
+        },
+        "created_at":{
+          "title":"Created At",
+          "type":"string",
+          "format":"date-time"
+        },
+        "updated_at":{
+          "title":"Updated At",
+          "type":"string",
+          "format":"date-time"
+        },
+        "url":{
+          "title":"Url",
+          "type":"string"
+        },
+        "last_commit":{
+          "title":"Last Commit",
+          "default":{
+
+          },
+          "allOf":[
+            {
+              "$ref":"#/definitions/Commit"
+            }
+          ]
+        }
+      },
+      "required":[
+        "name",
+        "id",
+        "full_name",
+        "created_at",
+        "updated_at",
+        "url"
+      ]
+    }
+  }
+}
